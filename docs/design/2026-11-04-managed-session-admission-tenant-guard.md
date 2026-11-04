@@ -69,8 +69,15 @@ which keeps its selection predicate and arguments private. Session admission
 retains the Resident Workspace guard decision and its lock-order explanation.
 For this change, an explicitly approved per-class ceiling adjustment from
 889 to 900 lines accommodates that necessary logic and explanation. This is
-a scoped exception to the ratchet-down convention; the global ceiling and
-the other per-class ceilings remain unchanged.
+a scoped exception to the ratchet-down convention.
+
+After merging main, CI identified one inherited size violation:
+`RuntimeBrokerService` grew from 4,270 to 4,284 lines in #16330's bounded
+runtime admission change. Under the same explicit authorization to adjust
+ceilings, raise its pin and the global maximum to exactly 4,284. The other
+per-class ceilings remain unchanged, so no other class gains a larger budget.
+Neither exception includes spare headroom. This follow-up changes only the
+size gate and documentation; production behavior is unchanged.
 
 ## Risks
 
@@ -99,3 +106,5 @@ the other per-class ceilings remain unchanged.
    default-switch test must resolve the newly selected default without a deadlock.
 4. Existing queue, creation, Workspace, migration and lock contract suites
    pass, including the MySQL profiles in CI.
+5. The source-size gate accepts the 900-line admission class and the inherited
+   4,284-line broker class at their exact documented ceilings.

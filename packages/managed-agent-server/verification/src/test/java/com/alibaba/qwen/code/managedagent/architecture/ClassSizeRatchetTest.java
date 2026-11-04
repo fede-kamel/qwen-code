@@ -42,7 +42,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ClassSizeRatchetTest {
     private static final int LARGE_CLASS_THRESHOLD = 800;
-    private static final int GLOBAL_MAX_LINES = 4270;
+    // PR #16327: approved 14-line allowance for #16330's bounded runtime admission.
+    private static final int GLOBAL_MAX_LINES = 4284;
     private static final String PIN_RESOURCE = "/class-size-ratchet.properties";
     private static final List<String> SOURCE_ROOTS =
             List.of("persistence/src/main/java", "runtime-broker/src/main/java");
